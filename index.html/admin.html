@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>إدارة المنصة</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="adm">
+  <header class="adm-top">
+    <div class="brand">
+      <div class="mark">م</div>
+      <div><b class="grad">Maged El-mohandes</b><span>منصة الفيزياء</span></div>
+    </div>
+    <div class="row">
+      <a class="btn ghost" href="index.html">المنصة</a>
+      <button class="btn ghost" id="out" type="button">خروج</button>
+    </div>
+  </header>
+
+  <section class="grid3" id="stats"></section>
+
+  <section class="card">
+    <div class="row sp">
+      <h3>الطلاب</h3>
+      <input id="q" type="search" placeholder="ابحث بالاسم أو الرقم" aria-label="بحث">
+    </div>
+    <p class="note" id="addNote" hidden>الطلاب بيسجلوا حساباتهم بنفسهم من صفحة الدخول، وتقدر تشوفهم وتحذفهم من هنا.</p>
+    <form id="add" class="add">
+      <input id="n" type="text" placeholder="اسم الطالب" required aria-label="اسم الطالب">
+      <input id="gn" type="text" placeholder="اسم ولي الأمر" required aria-label="اسم ولي الأمر">
+      <input id="ph" type="tel" placeholder="رقم الطالب" required aria-label="رقم الطالب">
+      <input id="gp" type="tel" placeholder="رقم ولي الأمر" required aria-label="رقم ولي الأمر">
+      <input id="pw" type="text" placeholder="كلمة مرور الطالب" required minlength="6" aria-label="كلمة مرور الطالب">
+      <select id="g" aria-label="المرحلة"><option>أولى ثانوي</option><option>تانية ثانوي</option><option selected>تالتة ثانوي</option></select>
+      <button class="btn" type="submit">إضافة طالب</button>
+    </form>
+    <div class="tbl"><table>
+      <thead><tr><th>الطالب</th><th>ولي الأمر</th><th>رقم الطالب</th><th>رقم ولي الأمر</th><th>المرحلة</th><th>النقاط</th><th></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h3>الكورسات</h3>
+    <form id="addc" class="add">
+      <input id="ct" type="text" placeholder="اسم الكورس" required aria-label="اسم الكورس">
+      <select id="cg" aria-label="المرحلة"><option>أولى ثانوي</option><option>تانية ثانوي</option><option selected>تالتة ثانوي</option></select>
+      <input id="cl" type="number" min="1" max="500" value="10" required aria-label="عدد الدروس">
+      <button class="btn" type="submit">إضافة كورس</button>
+    </form>
+    <div id="courses" class="clist"></div>
+  </section>
+  <section class="card" id="panel" hidden>
+    <div class="row sp"><h3 id="ptitle"></h3><button class="btn ghost" id="pclose" type="button">إغلاق</button></div>
+    <div id="lessons" class="clist"></div>
+    <form id="addl" class="add">
+      <input id="lt" type="text" placeholder="عنوان الدرس" required aria-label="عنوان الدرس">
+      <select id="lk" aria-label="نوع المحتوى"><option value="video">فيديو (رفع ملف)</option><option value="pdf">ملف PDF (رفع)</option><option value="link">رابط فيديو أو ملف</option></select>
+      <input id="lf" type="file" accept="video/*" aria-label="الملف">
+      <input id="lu" type="url" placeholder="https://..." aria-label="الرابط" hidden>
+      <button class="btn" id="lbtn" type="submit">إضافة الدرس</button>
+    </form>
+    <p class="note">رفع الملفات لحد <span id="limit">٢٠</span> ميجا للملف الواحد. للفيديوهات الأكبر استخدم "رابط" (مثلًا فيديو يوتيوب غير مدرج)، وهيفتح للطالب في صفحة جديدة.</p>
+  </section>
+  <p class="note">الكورسات اللي تضيفها هنا بتظهر في المنصة لكل الطلاب. بيانات الطلاب لسه محفوظة في متصفحك فقط (تجريبي).</p>
+</div>
+<div class="toast" id="toast" hidden></div>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="demo-auth.js"></script>
+<script src="auth.js"></script>
+<script src="courses.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تسجيل الدخول</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="login-body">
+<main class="login">
+  <div class="brand">
+    <div class="mark">م</div>
+    <div><b class="grad">Maged El-mohandes</b><span>منصة الفيزياء</span></div>
+  </div>
+  <h1>مرحبًا بك</h1>
+  <div class="tabs" role="group" aria-label="نوع العملية">
+    <button class="tab" type="button" id="tLogin" aria-pressed="true">تسجيل الدخول</button>
+    <button class="tab" type="button" id="tReg" aria-pressed="false">حساب جديد</button>
+  </div>
+
+  <form id="f" class="card" autocomplete="off">
+    <label for="u">اسم الطالب</label>
+    <input id="u" type="text" required autofocus>
+    <label for="p">كلمة المرور</label>
+    <input id="p" type="password" required>
+    <label class="chk"><input id="show" type="checkbox"> إظهار كلمة المرور</label>
+    <p class="err" id="err" hidden>الاسم أو كلمة المرور غير صحيحة. راجع بياناتك أو أنشئ حساب جديد.</p>
+    <button class="btn" type="submit">دخول</button>
+  </form>
+
+  <form id="r" class="card" autocomplete="off" hidden>
+    <label for="rn">اسم الطالب</label>
+    <input id="rn" type="text" required>
+    <label for="rg">اسم ولي الأمر</label>
+    <input id="rg" type="text" required>
+    <label for="rp">رقم هاتف الطالب</label>
+    <input id="rp" type="tel" required inputmode="numeric">
+    <label for="rq">رقم هاتف ولي الأمر</label>
+    <input id="rq" type="tel" required inputmode="numeric">
+    <label for="rw">كلمة المرور (٦ أحرف أو أكثر)</label>
+    <input id="rw" type="password" required minlength="6">
+    <label for="rl">المرحلة</label>
+    <select id="rl"><option>أولى ثانوي</option><option>تانية ثانوي</option><option selected>تالتة ثانوي</option></select>
+    <p class="err" id="rerr" hidden></p>
+    <button class="btn" type="submit">إنشاء الحساب</button>
+  </form>
+  <a class="muted" href="index.html">الرجوع للمنصة</a>
+</main>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="demo-auth.js"></script>
+<script src="auth.js"></script>
+<script>
+var f=document.getElementById('f'),r=document.getElementById('r'),tL=document.getElementById('tLogin'),tR=document.getElementById('tReg');
+Auth.ready.then(function(){var c=Auth.current();if(c)location.replace(c.admin?'admin.html':'index.html')});
+function mode(reg){f.hidden=reg;r.hidden=!reg;tL.setAttribute('aria-pressed',!reg);tR.setAttribute('aria-pressed',reg)}
+tL.addEventListener('click',function(){mode(false)});
+tR.addEventListener('click',function(){mode(true)});
+document.getElementById('show').addEventListener('change',function(e){document.getElementById('p').type=e.target.checked?'text':'password'});
+f.addEventListener('submit',function(e){
+  e.preventDefault();
+  var btn=f.querySelector('button[type=submit]');btn.disabled=true;
+  Auth.login(document.getElementById('u').value,document.getElementById('p').value).then(function(res){
+    if(res==='admin')location.replace('admin.html');
+    else if(res==='student')location.replace('index.html');
+    else{document.getElementById('err').hidden=false;btn.disabled=false}
+  });
+});
+var MSG={
+  pw:'كلمة المرور لازم تكون ٦ أحرف على الأقل.',
+  exists:'الرقم ده مسجل قبل كده. ادخل من تسجيل الدخول.',
+  phone:'اكتب رقم هاتف صحيح للطالب ولولي الأمر (١٠ أرقام على الأقل).',
+  names:'اكتب اسم الطالب واسم ولي الأمر.',
+  confirm:'تم إنشاء الحساب. فعّل الحساب من الرسالة اللي وصلت ثم سجّل الدخول.',
+  error:'حصلت مشكلة أثناء إنشاء الحساب. حاول مرة أخرى.'
+};
+r.addEventListener('submit',function(e){
+  e.preventDefault();
+  var btn=r.querySelector('button[type=submit]');btn.disabled=true;
+  Auth.register({n:document.getElementById('rn').value,gn:document.getElementById('rg').value,p:document.getElementById('rp').value,gp:document.getElementById('rq').value,g:document.getElementById('rl').value,pw:document.getElementById('rw').value}).then(function(res){
+    var er=document.getElementById('rerr');
+    if(res==='ok'){location.replace('index.html');return}
+    er.textContent=MSG[res]||MSG.error;er.hidden=false;btn.disabled=false;
+  });
+});
+</script>
+</body>
+</html>
